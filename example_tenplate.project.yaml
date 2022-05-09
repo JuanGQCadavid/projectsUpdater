@@ -1,0 +1,13 @@
+version: v1
+config: # All of this is optional
+  output_folders:
+    scripts: path/to/folder # By default is the same folder that live the yaml file.
+    setup: path/to/folder # By default is the same folder that live the yaml file.
+  behaviors:  
+    create_setup_script: true # It is true by defaul
+
+project:
+  name: ProjectName
+  directories:
+    pom: path/to/pom
+    target: path/to/targetx
