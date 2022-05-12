@@ -5,5 +5,5 @@ import (
 )
 
 type Reader interface {
-	GetProjectConfig(path string) (error, models.ProjectConfig)
+	GetProjectConfig(path string) (error, *models.ProjectConfig)
 }
