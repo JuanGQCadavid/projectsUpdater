@@ -28,7 +28,7 @@ func (cmd *RunDockerCommand) generateBashCommand() string {
 		CONTAINER_ID=$(docker run \
 			--name ${APP_NAME} \
 			--rm \
-			-p 8080:8080 \ # We should fetch this also in the file
+			-p 8080:8080 \
 			-d \
 			-t ${APP_NAME}-service /bin/bash /app/start.sh)
 

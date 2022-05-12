@@ -39,6 +39,17 @@ func (core *DjUtilsCore) Build(maven bool, image bool) {
 	}
 }
 
+func (core *DjUtilsCore) Init(path string) {
+	log.Println(fmt.Sprintf("Init: path-> %s", path))
+
+	cmd := commands.NewInitDockerCommand(path)
+	cmd.Execute()
+
+	cmd2 := commands.NewInitDjUtilsCommand(path)
+	cmd2.Execute()
+
+}
+
 func (core *DjUtilsCore) Run(image bool, k8s bool) {
 	log.Println(fmt.Sprintf("Run -> image: %s, k8s -> %s", strconv.FormatBool(image), strconv.FormatBool(k8s)))
 
@@ -59,4 +70,10 @@ func (core *DjUtilsCore) Run(image bool, k8s bool) {
 func (core *DjUtilsCore) Set(path string) {
 	log.Println(fmt.Sprintf("Set -> path: %s", path))
 	core.configRepository.SetActualConfig(*models.NewConfigFile(path))
+}
+
+func (core *DjUtilsCore) check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }

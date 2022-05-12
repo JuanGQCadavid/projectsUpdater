@@ -20,15 +20,11 @@ const (
 	BuildCommand Command = "build"
 	HelpCommand  Command = "help"
 	SetCommand   Command = "set"
+	InitCommand  Command = "init"
 )
 
 func main() {
 	argsWithOutProg := os.Args[1:]
-
-	//"/Users/juan.qc/git/projectsUpdater/example_tenplate.project.yaml"
-
-	dir := os.TempDir()
-	log.Println(dir)
 
 	var configRepo ports.ConfigRepository = local.NewConfigRepository()
 	var yamlReader ports.Reader = yml.NewYmlReader()
@@ -43,24 +39,37 @@ func main() {
 		fileArgs := os.Args[2]
 
 		if fileArgs == "." {
-			log.Println("HI!")
-			app := "pwd"
-
-			cmd := exec.Command(app) // arg0, arg1, arg2, arg3)
+			cmd := exec.Command("pwd")
 			stdout, err := cmd.Output()
 
 			if err != nil {
-				fmt.Println(err.Error())
-				return
+				log.Fatal(err.Error())
 			}
 
-			// Print the output
-
 			fileArgs = fmt.Sprintf("%s/djutils.yaml", strings.Split(string(stdout), "\n")[0])
-			fmt.Println(fileArgs)
 		}
 
 		coreService.Set(fileArgs)
+
+	case InitCommand:
+		if len(os.Args) < 3 {
+			log.Fatalln("You must provide the file path as dj-utils init <path/to/dir>")
+		}
+		dirArg := os.Args[2]
+
+		if dirArg == "." {
+			cmd := exec.Command("pwd")
+			stdout, err := cmd.Output()
+
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			dirArg = strings.Split(string(stdout), "\n")[0]
+			fmt.Println(dirArg)
+		}
+
+		coreService.Init(dirArg)
 
 	case BuildCommand:
 		mvn, image := false, false
@@ -151,6 +160,9 @@ func getCommand(args []string) Command {
 	case "set":
 		log.Println("set Command")
 		cmd = SetCommand
+	case "init":
+		log.Println("Init Command")
+		cmd = InitCommand
 	default:
 		log.Fatal("Command no found, run dj-utils help for more info.")
 	}

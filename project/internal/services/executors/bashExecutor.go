@@ -1,7 +1,6 @@
 package executors
 
 import (
-	"fmt"
 	"log"
 	"os/exec"
 )
@@ -14,23 +13,28 @@ func NewBashExecutor() *BashExecutor {
 }
 
 func (ex *BashExecutor) ExecuteCommand(commands ...string) {
-	inLine := ""
-	for _, command := range commands {
-		inLine = inLine + command + ";"
 
+	var inLine string = ""
+
+	if len(commands) == 1 {
+		inLine = commands[0]
+	} else {
+		inLine = ex.generateInLine(commands...)
 	}
 
 	log.Println(inLine)
 
 	cmd := exec.Command("/bin/sh", "-c", inLine)
 	res, _ := cmd.CombinedOutput()
-	fmt.Println(string(res))
-	// err := cmd.Run()
+	log.Println(string(res))
+}
 
-	// if err != nil {
-	// 	log.Panicln(err)
-	// }
+func (ex *BashExecutor) generateInLine(commands ...string) string {
+	inLine := ""
 
-	// res, _ := cmd.CombinedOutput()
-	// fmt.Println(string(res))
+	for _, command := range commands {
+		inLine = inLine + command + ";"
+	}
+	return inLine
+
 }

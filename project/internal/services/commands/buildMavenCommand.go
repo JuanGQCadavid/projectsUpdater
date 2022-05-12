@@ -6,15 +6,19 @@ import (
 	"strings"
 
 	"github.com/JuanGQCadavid/projectsUpdater/project/internal/domain/models"
+	"github.com/JuanGQCadavid/projectsUpdater/project/internal/domain/ports"
+	"github.com/JuanGQCadavid/projectsUpdater/project/internal/services/executors"
 )
 
 type BuildCommand struct {
 	projectConfig *models.ProjectConfig
+	bashExecutor  ports.Executors
 }
 
 func NewBuildCommand(projectConfig *models.ProjectConfig) *BuildCommand {
 	return &BuildCommand{
 		projectConfig: projectConfig,
+		bashExecutor:  executors.NewBashExecutor(),
 	}
 }
 
@@ -22,6 +26,7 @@ func (cmd *BuildCommand) Execute() {
 	bashCommand := cmd.generateBashCommand()
 
 	log.Println(bashCommand)
+	//cmd.bashExecutor.ExecuteCommand(bashCommand)
 }
 
 // docker run -it --rm  \
